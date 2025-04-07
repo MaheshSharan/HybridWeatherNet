@@ -1,88 +1,139 @@
 import os
-import argparse
 import logging
-from download_gsod import GSODDownloader
-from download_ncep import NCEPDownloader
-from data_alignment import DataAligner
+from pathlib import Path
+from datetime import datetime
+from typing import List, Dict, Optional
 
-# Set up logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+from .download_openmeteo import OpenMeteoDownloader
+from .download_gsod import GSODDownloader
+from .data_alignment import DataAligner
 
-def parse_args():
-    """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description='Run the weather bias correction data pipeline')
+class DataPipeline:
+    """Class to run the complete data processing pipeline."""
     
-    parser.add_argument('--start_year', type=int, default=2018, help='Start year for data collection')
-    parser.add_argument('--end_year', type=int, default=2023, help='End year for data collection')
-    parser.add_argument('--skip_download', action='store_true', help='Skip data download step')
-    parser.add_argument('--skip_processing', action='store_true', help='Skip data processing step')
-    parser.add_argument('--skip_alignment', action='store_true', help='Skip data alignment step')
+    def __init__(self, config: Dict):
+        """Initialize the data pipeline.
+        
+        Args:
+            config: Dictionary containing configuration parameters
+                - base_dir: Base directory for all data
+                - start_date: Start date in YYYY-MM-DD format
+                - end_date: End date in YYYY-MM-DD format
+                - locations: List of dictionaries containing location information
+                    - name: Location name
+                    - lat: Latitude
+                    - lon: Longitude
+                    - gsod_station: GSOD station ID
+        """
+        self.config = config
+        self.base_dir = Path(config['base_dir'])
+        
+        # Create directory structure
+        self.dirs = {
+            'openmeteo': self.base_dir / 'openmeteo',
+            'gsod': self.base_dir / 'gsod',
+            'aligned': self.base_dir / 'aligned'
+        }
+        
+        for dir_path in self.dirs.values():
+            dir_path.mkdir(parents=True, exist_ok=True)
+        
+        # Setup logging
+        logging.basicConfig(level=logging.INFO,
+                          format='%(asctime)s - %(levelname)s - %(message)s')
+        self.logger = logging.getLogger(__name__)
     
-    return parser.parse_args()
+    def run(self):
+        """Run the complete data pipeline."""
+        self.logger.info("Starting data pipeline...")
+        
+        try:
+            # Initialize downloaders
+            openmeteo_downloader = OpenMeteoDownloader(
+                output_dir=str(self.dirs['openmeteo']),
+                start_date=self.config['start_date'],
+                end_date=self.config['end_date']
+            )
+            
+            gsod_downloader = GSODDownloader(
+                output_dir=str(self.dirs['gsod']),
+                start_date=self.config['start_date'],
+                end_date=self.config['end_date']
+            )
+            
+            # Initialize data aligner
+            aligner = DataAligner(
+                openmeteo_dir=str(self.dirs['openmeteo']),
+                gsod_dir=str(self.dirs['gsod']),
+                output_dir=str(self.dirs['aligned'])
+            )
+            
+            # Process each location
+            for location in self.config['locations']:
+                self.logger.info(f"\nProcessing location: {location['name']}")
+                
+                try:
+                    # Download Open-Meteo data
+                    openmeteo_file = openmeteo_downloader.download_data(
+                        latitude=location['lat'],
+                        longitude=location['lon'],
+                        location_name=location['name']
+                    )
+                    
+                    # Download GSOD data
+                    gsod_file = gsod_downloader.download_data(
+                        station_id=location['gsod_station']
+                    )
+                    
+                    # Align data
+                    output_file = f"{location['name']}_{self.config['start_date']}_{self.config['end_date']}_aligned.csv"
+                    aligner.align_data(
+                        openmeteo_file=openmeteo_file,
+                        gsod_file=gsod_file,
+                        output_file=output_file
+                    )
+                    
+                except Exception as e:
+                    self.logger.error(f"Error processing location {location['name']}: {str(e)}")
+                    continue
+            
+            self.logger.info("Data pipeline completed successfully!")
+            
+        except Exception as e:
+            self.logger.error(f"Error in data pipeline: {str(e)}")
+            raise
 
 def main():
-    """Run the data pipeline."""
-    args = parse_args()
+    """Main function to run the data pipeline."""
+    # Example configuration
+    config = {
+        'base_dir': 'weather_data',
+        'start_date': '2023-01-01',
+        'end_date': '2023-12-31',
+        'locations': [
+            {
+                'name': 'Berlin',
+                'lat': 52.52,
+                'lon': 13.41,
+                'gsod_station': '10384'
+            },
+            {
+                'name': 'New_York',
+                'lat': 40.71,
+                'lon': -74.01,
+                'gsod_station': '72506'
+            },
+            {
+                'name': 'Tokyo',
+                'lat': 35.68,
+                'lon': 139.77,
+                'gsod_station': '47662'
+            }
+        ]
+    }
     
-    # Set up directories
-    base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    data_dir = os.path.join(base_dir, "data")
-    raw_dir = os.path.join(data_dir, "raw")
-    processed_dir = os.path.join(data_dir, "processed")
-    
-    gsod_dir = os.path.join(raw_dir, "gsod")
-    ncep_dir = os.path.join(raw_dir, "ncep")
-    
-    # Create directories if they don't exist
-    os.makedirs(gsod_dir, exist_ok=True)
-    os.makedirs(ncep_dir, exist_ok=True)
-    os.makedirs(processed_dir, exist_ok=True)
-    
-    # Step 1: Download GSOD data
-    if not args.skip_download:
-        logger.info("Step 1: Downloading GSOD data...")
-        gsod_downloader = GSODDownloader(gsod_dir, args.start_year, args.end_year)
-        successful_downloads = gsod_downloader.download_all()
-        logger.info(f"Successfully downloaded GSOD data for years: {successful_downloads}")
-        
-        # Extract GSOD data
-        successful_extractions = gsod_downloader.extract_all()
-        logger.info(f"Successfully extracted GSOD data for years: {successful_extractions}")
-        
-        # Process GSOD data
-        processed_data = gsod_downloader.process_all()
-        logger.info(f"Successfully processed GSOD data for years: {list(processed_data.keys())}")
-    
-    # Step 2: Download NCEP data
-    if not args.skip_download:
-        logger.info("Step 2: Downloading NCEP data...")
-        ncep_downloader = NCEPDownloader(ncep_dir, args.start_year, args.end_year)
-        download_results = ncep_downloader.download_all()
-        logger.info(f"Download results: {download_results}")
-        
-        # Process NCEP data
-        processed_data = ncep_downloader.process_all()
-        logger.info(f"Processed data: {list(processed_data.keys())}")
-        
-        # Combine variables
-        combined_data = ncep_downloader.combine_all()
-        logger.info(f"Combined data for years: {list(combined_data.keys())}")
-    
-    # Step 3: Align GSOD and NCEP data
-    if not args.skip_alignment:
-        logger.info("Step 3: Aligning GSOD and NCEP data...")
-        aligner = DataAligner(gsod_dir, ncep_dir, processed_dir, args.start_year, args.end_year)
-        
-        # Align data
-        aligned_data = aligner.align_all_data()
-        
-        if aligned_data is not None:
-            # Analyze bias
-            bias_analysis = aligner.analyze_bias(aligned_data)
-            logger.info(f"Overall mean bias: {bias_analysis['overall']['mean_bias']:.2f}°C")
-    
-    logger.info("Data pipeline completed successfully!")
+    pipeline = DataPipeline(config)
+    pipeline.run()
 
 if __name__ == "__main__":
     main() 
