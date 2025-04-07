@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import List, Dict, Optional
 
-from .download_openmeteo import OpenMeteoDownloader
+from .simple_openmeteo import SimpleOpenMeteoDownloader
 from .download_gsod import GSODDownloader
 from .data_alignment import DataAligner
 
@@ -49,7 +49,7 @@ class DataPipeline:
         
         try:
             # Initialize downloaders
-            openmeteo_downloader = OpenMeteoDownloader(
+            openmeteo_downloader = SimpleOpenMeteoDownloader(
                 output_dir=str(self.dirs['openmeteo']),
                 start_date=self.config['start_date'],
                 end_date=self.config['end_date']
