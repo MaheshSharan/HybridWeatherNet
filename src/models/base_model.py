@@ -233,7 +233,7 @@ class BiasCorrectionModel(pl.LightningModule):
             'optimizer': optimizer,
             'lr_scheduler': {
                 'scheduler': scheduler,
-                'monitor': 'val/total_loss',
+                'monitor': 'val/mse_loss',
                 'interval': 'epoch',
                 'frequency': 1
             }
@@ -298,18 +298,63 @@ class BiasCorrectionModel(pl.LightningModule):
         Returns:
             Dict[str, torch.Tensor]: Dictionary of calibration metrics
         """
-        # Default implementation: basic metrics
-        # In practice, this should be implemented by subclasses
+        # Debug prints
+        print(f"y_true shape: {y_true.shape}")
+        print(f"y_pred shape: {y_pred.shape}")
+        print(f"uncertainty shape: {uncertainty.shape}")
+        
+        # Check for NaN values
+        if torch.isnan(y_true).any():
+            print("Warning: NaN values in y_true")
+            y_true = torch.nan_to_num(y_true, nan=0.0)
+        if torch.isnan(y_pred).any():
+            print("Warning: NaN values in y_pred")
+            y_pred = torch.nan_to_num(y_pred, nan=0.0)
+        if torch.isnan(uncertainty).any():
+            print("Warning: NaN values in uncertainty")
+            uncertainty = torch.nan_to_num(uncertainty, nan=1.0)  # Use 1.0 for NaN uncertainty
+        
+        # Ensure uncertainty is positive and non-zero
+        uncertainty = torch.clamp(uncertainty, min=1e-6)
+        
+        # Reshape tensors to 2D for correlation calculation
+        y_true_flat = y_true.reshape(-1, y_true.size(-1))
+        y_pred_flat = y_pred.reshape(-1, y_pred.size(-1))
+        uncertainty_flat = uncertainty.reshape(-1, uncertainty.size(-1))
         
         # Calculate normalized error
-        normalized_error = (y_true - y_pred) / (uncertainty + 1e-6)
+        normalized_error = (y_true_flat - y_pred_flat) / uncertainty_flat
         
-        # Calculate calibration metrics
-        metrics = {
-            'calibration_error': torch.mean(torch.abs(normalized_error - 0)),
-            'uncertainty_correlation': torch.corrcoef(
-                torch.stack([torch.abs(y_true - y_pred), uncertainty])
-            )[0, 1]
-        }
+        # Calculate absolute errors
+        abs_errors = torch.abs(y_true_flat - y_pred_flat)
+        
+        # Calculate calibration metrics with error handling
+        try:
+            # Calculate correlation coefficient
+            stacked = torch.stack([
+                abs_errors.mean(dim=-1),  # Average across last dimension
+                uncertainty_flat.mean(dim=-1)  # Average across last dimension
+            ])
+            
+            # Check if we have enough samples for correlation
+            if stacked.shape[1] < 2:
+                print("Warning: Not enough samples for correlation calculation")
+                corr = torch.tensor(0.0, device=stacked.device)
+            else:
+                corr = torch.corrcoef(stacked)[0, 1]
+                if torch.isnan(corr):
+                    print("Warning: Correlation coefficient is NaN")
+                    corr = torch.tensor(0.0, device=stacked.device)
+            
+            metrics = {
+                'calibration_error': torch.mean(torch.abs(normalized_error - 0)),
+                'uncertainty_correlation': corr
+            }
+        except Exception as e:
+            print(f"Error in calibration metrics calculation: {str(e)}")
+            metrics = {
+                'calibration_error': torch.tensor(0.0, device=y_true.device),
+                'uncertainty_correlation': torch.tensor(0.0, device=y_true.device)
+            }
         
         return metrics 

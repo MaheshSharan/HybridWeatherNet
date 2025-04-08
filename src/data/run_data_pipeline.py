@@ -81,6 +81,7 @@ def main():
             {'name': 'Amsterdam', 'lat': 52.31, 'lon': 4.76, 'isd_station': '062400-99999'},
             {'name': 'Paris', 'lat': 48.97, 'lon': 2.40, 'isd_station': '071500-99999'}
         ]
+        
     }
     pipeline = DataPipeline(config)
     pipeline.run()

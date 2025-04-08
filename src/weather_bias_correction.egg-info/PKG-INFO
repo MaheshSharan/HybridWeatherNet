@@ -1,0 +1,23 @@
+Metadata-Version: 2.1
+Name: weather_bias_correction
+Version: 0.1.0
+Summary: A package for correcting biases in weather forecasts using deep learning
+Author: SeoYea-Ji
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Requires-Python: >=3.8
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: xarray
+Requires-Dist: requests
+Requires-Dist: tqdm
+Requires-Dist: netCDF4
+Requires-Dist: pytest
+Requires-Dist: torch>=2.0.0
+Requires-Dist: pytorch-lightning>=2.0.0
+Requires-Dist: torch-geometric>=2.3.0
+Requires-Dist: streamlit>=1.24.0

@@ -9,8 +9,8 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 from pytorch_lightning.loggers import TensorBoardLogger
 
 from ..models import DeepBiasCorrectionModel
-from ..data import DataAligner
-from .config import get_config
+from ..data.weather_data_module import WeatherDataModule
+from .train import test_model, parse_args
 
 def setup_logging() -> logging.Logger:
     """Set up logging configuration."""
@@ -20,23 +20,6 @@ def setup_logging() -> logging.Logger:
     )
     return logging.getLogger(__name__)
 
-def create_test_model(config: Dict[str, Dict[str, Any]]) -> pl.LightningModule:
-    """Create a model for testing."""
-    model_config = config['model']
-    training_config = config['training']
-    
-    return DeepBiasCorrectionModel(
-        input_dim=model_config['input_dim'],
-        hidden_dim=model_config['hidden_dim'],
-        output_dim=model_config['output_dim'],
-        num_layers=model_config['num_layers'],
-        dropout_rate=model_config['dropout_rate'],
-        learning_rate=training_config['learning_rate'],
-        weight_decay=training_config['weight_decay'],
-        physics_weight=training_config['physics_weight'],
-        bidirectional=model_config['bidirectional']
-    )
-
 def create_test_data_module(
     config: Dict[str, Dict[str, Any]],
     data_dir: str
@@ -44,11 +27,32 @@ def create_test_data_module(
     """Create a data module for testing."""
     data_config = config['data']
     
-    return DataAligner(
+    return WeatherDataModule(
         data_dir=data_dir,
         batch_size=data_config['batch_size'],
         num_workers=data_config['num_workers']
     )
+
+def test_trained_model(checkpoint_path: str):
+    """
+    Test a trained model from a checkpoint.
+    
+    Args:
+        checkpoint_path: Path to the model checkpoint
+    """
+    # Parse arguments
+    args = parse_args()
+    
+    # Call the test_model function from train.py
+    test_results = test_model(args, model_path=checkpoint_path)
+    
+    # Log results
+    logger = setup_logging()
+    logger.info("Test results:")
+    for metric_name, metric_value in test_results[0].items():
+        logger.info(f"{metric_name}: {metric_value:.4f}")
+    
+    return test_results
 
 def main():
     """Test the model training pipeline."""
@@ -56,20 +60,57 @@ def main():
     logger = setup_logging()
     logger.info("Starting test training pipeline...")
     
-    # Get configuration
-    config = get_config()
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description='Test bias correction model')
+    parser.add_argument('--checkpoint', type=str, default=None,
+                      help='Path to model checkpoint for testing')
+    parser.add_argument('--data_dir', type=str, default='data/processed',
+                      help='Directory containing processed data')
+    args = parser.parse_args()
     
     # Set random seed for reproducibility
     pl.seed_everything(42)
     
-    # Create model
-    model = create_test_model(config)
-    logger.info("Created test model with architecture:")
-    logger.info(model)
+    if args.checkpoint:
+        # Test an existing trained model
+        logger.info(f"Testing model from checkpoint: {args.checkpoint}")
+        test_trained_model(args.checkpoint)
+    else:
+        # Run small-scale training and testing
+        run_test_training(args.data_dir)
+    
+def run_test_training(data_dir):
+    """Run a small-scale test training session."""
+    logger = setup_logging()
+    
+    # Create model using the same architecture as in main training
+    model = DeepBiasCorrectionModel(
+        input_dim=7,  # Number of input features - temperature, humidity, wind speed, wind direction, cloud cover (3 layers)
+        hidden_dim=64,
+        output_dim=1,  # Temperature bias correction
+        num_layers=2,
+        dropout_rate=0.1,
+        learning_rate=1e-4,
+        weight_decay=1e-5,
+        physics_weight=0.1,
+        num_mc_samples=20,  # For uncertainty estimation
+        bidirectional=True
+    )
+    logger.info("Created test model")
+    
+    # Print model architecture for debugging
+    logger.info(f"Model architecture:")
+    logger.info(f"- Input dimension: {model.input_dim}")
+    logger.info(f"- Hidden dimension: {model.hidden_dim}")
+    logger.info(f"- Output dimension: {model.output_dim}")
+    logger.info(f"- LSTM bidirectional: {model.bidirectional if hasattr(model, 'bidirectional') else True}")
     
     # Create data module
-    data_dir = os.path.join('data', 'processed')
-    data_module = create_test_data_module(config, data_dir)
+    data_module = WeatherDataModule(
+        data_dir=data_dir,
+        batch_size=8,
+        num_workers=2
+    )
     logger.info("Created test data module")
     
     # Create callbacks
@@ -94,7 +135,6 @@ def main():
         logger=tb_logger,
         accelerator='auto',
         devices=1,
-        precision=32,
         gradient_clip_val=1.0,
         accumulate_grad_batches=1,
         limit_train_batches=0.1,  # Use only 10% of training data
