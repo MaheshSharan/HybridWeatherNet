@@ -51,14 +51,14 @@ streamlit run src/app/app.py
 
 ## Data Sources
 
-### NCEP Data
-- Source: NCEP/NCAR Reanalysis dataset
-- Variables: Temperature, pressure, wind components, etc.
-- Resolution: 0.25° x 0.25°
+### Open-Meteo Data
+- Source: Open-Meteo Historical Weather API
+- Variables: Temperature, humidity, wind speed, wind direction, cloud cover
+- Resolution: Point data for specific locations
 - Time range: 2018-2023
 
-### GSOD Data
-- Source: Global Surface Summary of the Day
+### ISD-Lite Data
+- Source: NOAA Integrated Surface Database (ISD) Lite
 - Variables: Temperature observations from weather stations
 - Coverage: Global weather stations
 - Time range: 2018-2023

@@ -20,8 +20,8 @@ A deep learning approach for correcting systematic biases in weather forecasts u
   - Uncertainty quantification
 
 - **Data Integration**
-  - NCEP forecast data integration
-  - GSOD station observations
+  - Open-Meteo Data
+  - ISD-Lite station observations
   - Automated data download and preprocessing
 
 - **Interactive Interface**

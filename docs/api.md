@@ -20,8 +20,8 @@ model = DeepBiasCorrectionModel.load_from_checkpoint('path/to/checkpoint.pth')
 
 # Prepare data
 data_loader = DataLoader(
-    ncep_file='path/to/ncep_data.nc',
-    gsod_file='path/to/gsod_data.csv'
+    openmeteo_file='path/to/openmeteo_data.csv',
+    isd_file='path/to/isd_data.csv'
 )
 
 # Make predictions
@@ -78,8 +78,8 @@ class DeepBiasCorrectionModel:
 class DataLoader:
     def __init__(
         self,
-        ncep_file: str,
-        gsod_file: str,
+        openmeteo_file: str,
+        isd_file: str,
         start_date: Optional[str] = None,
         end_date: Optional[str] = None
     ):
@@ -87,8 +87,8 @@ class DataLoader:
         Initialize data loader.
 
         Args:
-            ncep_file: Path to NCEP NetCDF file
-            gsod_file: Path to GSOD CSV file
+            openmeteo_file: Path to Open-Meteo CSV file
+            isd_file: Path to ISD-Lite CSV file
             start_date: Optional start date filter (YYYY-MM-DD)
             end_date: Optional end date filter (YYYY-MM-DD)
         """
@@ -162,8 +162,8 @@ from weather_bias_correction.visualization import plot_predictions
 
 # Load data
 data_loader = DataLoader(
-    ncep_file='data/ncep_2023.nc',
-    gsod_file='data/gsod_2023.csv',
+    openmeteo_file='data/openmeteo_2023.csv',
+    isd_file='data/isd_2023.csv',
     start_date='2023-01-01',
     end_date='2023-12-31'
 )

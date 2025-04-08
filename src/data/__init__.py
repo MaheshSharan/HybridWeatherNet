@@ -6,13 +6,13 @@ weather data from various sources for bias correction.
 """
 
 from .simple_openmeteo import SimpleOpenMeteoDownloader
-from .download_gsod import GSODDownloader
+from .isd_lite_downloader import ISDLiteDownloader
 from .data_alignment import DataAligner
 from .run_data_pipeline import DataPipeline
 
 __all__ = [
     'SimpleOpenMeteoDownloader',
-    'GSODDownloader',
+    'ISDLiteDownloader',
     'DataAligner',
     'DataPipeline'
-] 
+]
