@@ -8,21 +8,19 @@ from typing import Dict, Any
 DATA_CONFIG = {
     'batch_size': 32,
     'num_workers': 4,
-    'input_dim': 5,  # Number of input features
-    'sequence_length': 24,  # Hours of historical data to use
-    'prediction_length': 24,  # Hours to predict ahead
+    'input_dim': 7,  # Fixed to match paper
+    'sequence_length': 24,
+    'prediction_length': 24,
 }
 
-# Model configuration
 MODEL_CONFIG = {
     'hidden_dim': 256,
     'num_layers': 3,
     'dropout_rate': 0.2,
     'bidirectional': True,
-    'output_dim': 1,  # For temperature prediction
+    'output_dim': 1,
 }
 
-# Training configuration
 TRAINING_CONFIG = {
     'learning_rate': 1e-3,
     'weight_decay': 1e-5,
@@ -33,23 +31,16 @@ TRAINING_CONFIG = {
     'accumulate_grad_batches': 1,
 }
 
-# Logging configuration
 LOGGING_CONFIG = {
     'log_dir': 'logs',
     'experiment_name': 'bias_correction',
     'log_every_n_steps': 50,
 }
 
-def get_config() -> Dict[str, Dict[str, Any]]:
-    """
-    Get the complete configuration dictionary.
-    
-    Returns:
-        Dict[str, Dict[str, Any]]: Complete configuration dictionary
-    """
+def get_config():
     return {
         'data': DATA_CONFIG,
         'model': MODEL_CONFIG,
         'training': TRAINING_CONFIG,
         'logging': LOGGING_CONFIG,
-    } 
+    }
