@@ -5,12 +5,13 @@ import logging
 import pandas as pd
 import numpy as np
 from typing import Dict, Any, Optional, Tuple
+import torch
 
 # Add the project root to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
 
-from .model_serving import ModelServer
-from .visualization import (
+from src.app.model_serving import ModelServer
+from src.app.visualization import (
     plot_temperature_forecast,
     plot_bias_correction,
     plot_uncertainty,
@@ -59,16 +60,21 @@ def process_data(data: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
         Tuple[np.ndarray, np.ndarray]: Processed features and timestamps
     """
     try:
-        # Extract features
-        features = data.drop(['timestamp'], axis=1).values
-        
-        # Extract timestamps
-        timestamps = data['timestamp'].values
-        
-        return features, timestamps
+        features, timestamps = process_data(data)
+        predictions, uncertainty = st.session_state.model_server.predict(
+            features,
+            return_uncertainty=True,
+            batch_size=32
+        )
+        st.session_state.results = {
+            'original': features[:, 0],
+            'corrected': predictions.squeeze(),
+            'uncertainty': uncertainty.squeeze() if uncertainty is not None else None,
+            'timestamps': timestamps
+        }
+        st.success("Data processed successfully!")
     except Exception as e:
-        logger.error(f"Error processing data: {str(e)}")
-        raise
+        st.error(f"Error processing data: {str(e)}")
 
 def main():
     """Main Streamlit app function."""
@@ -93,7 +99,7 @@ def main():
         # Model selection
         model_path = st.text_input(
             "Model Path",
-            value="logs/bias_correction/checkpoints/model-best.ckpt",
+            value="C:\\Users\\SeoYea-Ji\\weather_bias_correction\\logs\\final_fix\\checkpoints\\bias_correction-epoch=16-val_loss=0.00.ckpt",
             help="Path to the trained model checkpoint"
         )
         
@@ -210,4 +216,4 @@ def main():
             st.info("Results will appear here after processing the data.")
 
 if __name__ == '__main__':
-    main() 
+    main()

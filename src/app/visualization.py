@@ -1,206 +1,117 @@
-import streamlit as st
-import pandas as pd
-import numpy as np
 import plotly.graph_objects as go
-from plotly.subplots import make_subplots
-from typing import Dict, Any, List, Tuple
+import numpy as np
+from typing import Optional
 
 def plot_temperature_forecast(
     original: np.ndarray,
     corrected: np.ndarray,
-    timestamps: List[str],
-    title: str = "Temperature Forecast Comparison"
+    timestamps: np.ndarray
 ) -> go.Figure:
-    """
-    Create a plot comparing original and bias-corrected temperature forecasts.
-    
-    Args:
-        original (np.ndarray): Original temperature forecasts
-        corrected (np.ndarray): Bias-corrected temperature forecasts
-        timestamps (List[str]): List of timestamps
-        title (str): Plot title
-        
-    Returns:
-        go.Figure: Plotly figure object
-    """
+    """Plot original vs corrected temperature forecasts."""
     fig = go.Figure()
-    
-    # Add original forecast
-    fig.add_trace(
-        go.Scatter(
-            x=timestamps,
-            y=original,
-            name="Original Forecast",
-            line=dict(color="blue", dash="dash")
-        )
-    )
-    
-    # Add corrected forecast
-    fig.add_trace(
-        go.Scatter(
-            x=timestamps,
-            y=corrected,
-            name="Bias-Corrected Forecast",
-            line=dict(color="red")
-        )
-    )
-    
-    # Update layout
+    fig.add_trace(go.Scatter(
+        x=timestamps,
+        y=original,
+        name="Original Forecast",
+        line=dict(color="blue")
+    ))
+    fig.add_trace(go.Scatter(
+        x=timestamps,
+        y=corrected,
+        name="Corrected Forecast",
+        line=dict(color="green")
+    ))
+    # Add difference trace
+    diff = corrected - original
+    fig.add_trace(go.Scatter(
+        x=timestamps,
+        y=diff,
+        name="Predicted Bias",
+        line=dict(color="red", dash="dash")
+    ))
     fig.update_layout(
-        title=title,
+        title="Temperature Forecast Comparison",
         xaxis_title="Time",
         yaxis_title="Temperature (°C)",
-        hovermode="x unified"
+        legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01)
     )
-    
     return fig
 
 def plot_bias_correction(
     original: np.ndarray,
     corrected: np.ndarray,
-    timestamps: List[str],
-    title: str = "Bias Correction Analysis"
+    timestamps: np.ndarray
 ) -> go.Figure:
-    """
-    Create a plot showing the bias correction analysis.
-    
-    Args:
-        original (np.ndarray): Original temperature forecasts
-        corrected (np.ndarray): Bias-corrected temperature forecasts
-        timestamps (List[str]): List of timestamps
-        title (str): Plot title
-        
-    Returns:
-        go.Figure: Plotly figure object
-    """
-    # Calculate bias
-    bias = original - corrected
-    
-    # Create subplots
-    fig = make_subplots(
-        rows=2,
-        cols=1,
-        subplot_titles=("Temperature Forecasts", "Bias"),
-        vertical_spacing=0.2
-    )
-    
-    # Add temperature forecasts
-    fig.add_trace(
-        go.Scatter(
-            x=timestamps,
-            y=original,
-            name="Original Forecast",
-            line=dict(color="blue", dash="dash")
-        ),
-        row=1,
-        col=1
-    )
-    
-    fig.add_trace(
-        go.Scatter(
-            x=timestamps,
-            y=corrected,
-            name="Bias-Corrected Forecast",
-            line=dict(color="red")
-        ),
-        row=1,
-        col=1
-    )
-    
-    # Add bias
-    fig.add_trace(
-        go.Scatter(
-            x=timestamps,
-            y=bias,
-            name="Bias",
-            line=dict(color="green")
-        ),
-        row=2,
-        col=1
-    )
-    
-    # Update layout
+    """Plot bias correction over time."""
+    bias = corrected - original  # Predicted bias
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=timestamps,
+        y=bias,
+        name="Predicted Bias",
+        line=dict(color="purple")
+    ))
+    # Add zero line for reference
+    fig.add_hline(y=0, line_dash="dash", line_color="gray", annotation_text="Zero Bias")
     fig.update_layout(
-        title=title,
-        height=800,
-        showlegend=True
+        title="Bias Correction Analysis",
+        xaxis_title="Time",
+        yaxis_title="Bias (°C)",
+        legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01)
     )
-    
-    # Update y-axes labels
-    fig.update_yaxes(title_text="Temperature (°C)", row=1, col=1)
-    fig.update_yaxes(title_text="Bias (°C)", row=2, col=1)
-    
-    # Update x-axes labels
-    fig.update_xaxes(title_text="Time", row=2, col=1)
-    
     return fig
 
 def plot_uncertainty(
-    mean: np.ndarray,
-    std: np.ndarray,
-    timestamps: List[str],
-    title: str = "Forecast Uncertainty"
+    corrected: np.ndarray,
+    uncertainty: np.ndarray,
+    timestamps: np.ndarray
 ) -> go.Figure:
-    """
-    Create a plot showing the forecast uncertainty.
-    
-    Args:
-        mean (np.ndarray): Mean temperature forecast
-        std (np.ndarray): Standard deviation of temperature forecast
-        timestamps (List[str]): List of timestamps
-        title (str): Plot title
-        
-    Returns:
-        go.Figure: Plotly figure object
-    """
+    """Plot corrected forecast with uncertainty bounds."""
     fig = go.Figure()
-    
-    # Add mean forecast
-    fig.add_trace(
-        go.Scatter(
-            x=timestamps,
-            y=mean,
-            name="Mean Forecast",
-            line=dict(color="blue")
-        )
-    )
-    
-    # Add uncertainty bands
-    fig.add_trace(
-        go.Scatter(
-            x=timestamps + timestamps[::-1],
-            y=np.concatenate([mean + 2*std, (mean - 2*std)[::-1]]),
-            fill='toself',
-            fillcolor='rgba(0,100,80,0.2)',
-            line=dict(color='rgba(255,255,255,0)'),
-            name='95% Confidence Interval'
-        )
-    )
-    
-    # Update layout
+    std = np.sqrt(uncertainty)  # Convert variance to std dev
+    fig.add_trace(go.Scatter(
+        x=timestamps,
+        y=corrected,
+        name="Corrected Forecast",
+        line=dict(color="green")
+    ))
+    fig.add_trace(go.Scatter(
+        x=timestamps,
+        y=corrected + 2 * std,
+        name="Upper Bound (95%)",
+        line=dict(color="green", dash="dash"),
+        opacity=0.3
+    ))
+    fig.add_trace(go.Scatter(
+        x=timestamps,
+        y=corrected - 2 * std,
+        name="Lower Bound (95%)",
+        line=dict(color="green", dash="dash"),
+        opacity=0.3,
+        fill="tonexty"  # Fill between bounds
+    ))
     fig.update_layout(
-        title=title,
+        title="Corrected Forecast with Uncertainty",
         xaxis_title="Time",
         yaxis_title="Temperature (°C)",
-        hovermode="x unified"
+        legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01)
     )
-    
     return fig
 
-def display_metrics(metrics: Dict[str, float]) -> None:
-    """
-    Display evaluation metrics in the Streamlit app.
-    
-    Args:
-        metrics (Dict[str, float]): Dictionary of metric names and values
-    """
-    # Create columns for metrics
-    cols = st.columns(len(metrics))
-    
-    # Display each metric
-    for col, (metric_name, value) in zip(cols, metrics.items()):
-        with col:
-            st.metric(
-                label=metric_name.replace('_', ' ').title(),
-                value=f"{value:.4f}"
-            ) 
+def display_metrics(metrics: dict) -> None:
+    """Display performance metrics in Streamlit."""
+    import streamlit as st
+    st.subheader("Performance Metrics")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Mean Bias (°C)", f"{metrics['mean_bias']:.4f}")
+    with col2:
+        st.metric("RMSE (°C)", f"{metrics['rmse']:.4f}")
+    with col3:
+        st.metric("MAE (°C)", f"{metrics['mae']:.4f}")
+    # Add interpretation
+    st.write("""
+    - **Mean Bias**: Average difference between original and corrected forecasts. Should be near 0 for unbiased corrections.
+    - **RMSE**: Root Mean Squared Error—measures correction magnitude. Should be low (~1-2°C).
+    - **MAE**: Mean Absolute Error—average correction size. Should match typical bias (~1-2°C).
+    """)

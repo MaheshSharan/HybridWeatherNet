@@ -6,14 +6,15 @@ import torch
 import numpy as np
 
 class WeatherDataset(Dataset):
-    def __init__(self, data_dir: str, location: str):
+    def __init__(self, data_dir: str, location: str, sequence_length: int = 24):
         self.data = pd.read_csv(os.path.join(data_dir, f"{location}_2018-01-01_2023-12-31_aligned.csv"))
         self.data['date'] = pd.to_datetime(self.data['date'])
         self.data.set_index('date', inplace=True)
+        self.sequence_length = sequence_length
         
         # Prepare features and targets using the correct column names
         feature_columns = [
-            'temperature',          # Open-Meteo temperature
+            'temperature',          # Open-Meteo temperature (forecast)
             'humidity',            # Open-Meteo humidity
             'wind_speed_model',    # Open-Meteo wind speed
             'wind_direction_model', # Open-Meteo wind direction
@@ -31,33 +32,36 @@ class WeatherDataset(Dataset):
         self.feature_stds = np.nanstd(self.features, axis=0)
         self.features = (self.features - self.feature_means) / (self.feature_stds + 1e-8)
         
-        # Normalize targets
-        self.targets = self.data['temp_avg'].values
+        # Compute bias as target (observed - forecast)
+        self.targets = (self.data['temp_avg'] - self.data['temperature']).values
         self.target_mean = np.nanmean(self.targets)
         self.target_std = np.nanstd(self.targets)
         self.targets = (self.targets - self.target_mean) / (self.target_std + 1e-8)
         
     def __len__(self):
-        return len(self.data)
+        # Adjust length to account for sequence window
+        return len(self.data) - self.sequence_length + 1
     
     def __getitem__(self, idx):
-        # Return data as a dictionary with 'input' and 'target' keys
-        # Add sequence dimension (1) to make it 3D: (batch_size, sequence_length, features)
+        # Return sequence of features and latest target
+        start_idx = idx
+        end_idx = idx + self.sequence_length
         return {
-            'input': torch.FloatTensor(self.features[idx]).unsqueeze(0),  # Add sequence dimension
-            'target': torch.FloatTensor([self.targets[idx]]).unsqueeze(0)  # Add sequence dimension to match model output
+            'input': torch.FloatTensor(self.features[start_idx:end_idx]),  # Shape: [24, 7]
+            'target': torch.FloatTensor([self.targets[end_idx - 1]]).unsqueeze(0)  # Shape: [1, 1]
         }
     
     def denormalize_target(self, normalized_target):
-        """Convert normalized target back to original scale."""
+        """Convert normalized target (bias) back to original scale."""
         return normalized_target * self.target_std + self.target_mean
 
 class WeatherDataModule(pl.LightningDataModule):
-    def __init__(self, data_dir: str, batch_size: int = 32, num_workers: int = 4):
+    def __init__(self, data_dir: str, batch_size: int = 32, num_workers: int = 4, sequence_length: int = 24):
         super().__init__()
         self.data_dir = data_dir
         self.batch_size = batch_size
         self.num_workers = num_workers
+        self.sequence_length = sequence_length
         
         # Define locations
         self.locations = ['London', 'Amsterdam', 'Paris']
@@ -69,14 +73,15 @@ class WeatherDataModule(pl.LightningDataModule):
         self.test_datasets = []
         
         for location in self.locations:
-            dataset = WeatherDataset(self.data_dir, location)
+            dataset = WeatherDataset(self.data_dir, location, self.sequence_length)
             
             # Split data: 70% train, 15% val, 15% test
             train_size = int(0.7 * len(dataset))
             val_size = int(0.15 * len(dataset))
+            test_size = len(dataset) - train_size - val_size
             
             train_dataset, val_dataset, test_dataset = torch.utils.data.random_split(
-                dataset, [train_size, val_size, len(dataset) - train_size - val_size]
+                dataset, [train_size, val_size, test_size]
             )
             
             self.train_datasets.append(train_dataset)
@@ -116,4 +121,4 @@ class WeatherDataModule(pl.LightningDataModule):
             shuffle=False,
             num_workers=self.num_workers,
             persistent_workers=True
-        ) 
+        )
