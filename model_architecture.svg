@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333333"></polygon>
+    </marker>
+  </defs>
+  <rect x="103.158" y="7.152" width="318.182" height="22.727" fill="#2c3e50" rx="10" ry="10"></rect>
+  <text x="262.249" y="23.061" font-family="Arial" font-size="26" text-anchor="middle" font-weight="bold" fill="white" style="white-space: pre; font-size: 11.8px;">Weather Bias Correction Model Architecture</text>
+  <rect x="125.885" y="38.971" width="272.727" height="36.364" fill="#e6f7ff" stroke="#0099cc" stroke-width="2.5" rx="12" ry="12"></rect>
+  <text x="262.249" y="52.607" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 9.1px;">Input Layer</text>
+  <text x="262.249" y="66.243" font-family="Arial" font-size="15" text-anchor="middle" style="white-space: pre; font-size: 6.8px;">Temperature, Humidity, Wind Speed, Wind Direction, Cloud Cover</text>
+  <rect x="125.885" y="88.971" width="272.727" height="27.273" fill="#f0f9e8" stroke="#7fbc41" stroke-width="2.5" rx="12" ry="12"></rect>
+  <text x="262.249" y="101.88" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 9.1px;">Normalization Layer</text>
+  <text x="262.249" y="109.971" font-family="Arial" font-size="14" text-anchor="middle" style="white-space: pre; font-size: 6.4px;">(Zero Mean, Unit Variance)</text>
+  <rect x="103.158" y="129.88" width="318.182" height="200" fill="#f5f5f5" stroke="#aaaaaa" stroke-width="2" rx="15" ry="15" opacity="0.5"></rect>
+  <text x="262.249" y="141.243" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" fill="#555555" style="white-space: pre; font-size: 8.2px;">Data Processing Pipeline</text>
+  <rect x="125.885" y="148.061" width="122.727" height="81.818" fill="#fff7f3" stroke="#d73027" stroke-width="2.5" rx="12" ry="12"></rect>
+  <text x="187.249" y="159.425" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 9.1px;">LSTM Module</text>
+  <rect x="137.249" y="166.243" width="100" height="56.818" fill="#fddbc7" stroke="#d73027" stroke-width="1.5" rx="8" ry="8"></rect>
+  <text x="187.249" y="177.607" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 7.3px;">Bidirectional LSTM</text>
+  <text x="187.249" y="186.698" font-family="Arial" font-size="14" text-anchor="middle" style="white-space: pre; font-size: 6.4px;">(3 layers)</text>
+  <line x1="146.34" y1="191.243" x2="228.158" y2="191.243" stroke="#d73027" stroke-width="1" stroke-dasharray="3,3"></line>
+  <text x="187.249" y="200.334" font-family="Arial" font-size="14" text-anchor="middle" style="white-space: pre; font-size: 6.4px;">Layer Normalization</text>
+  <line x1="146.34" y1="204.88" x2="228.158" y2="204.88" stroke="#d73027" stroke-width="1" stroke-dasharray="3,3"></line>
+  <text x="187.249" y="213.971" font-family="Arial" font-size="14" text-anchor="middle" style="white-space: pre; font-size: 6.4px;">Dropout (0.2)</text>
+  <rect x="275.885" y="148.061" width="122.727" height="81.818" fill="#edf8fb" stroke="#2c7fb8" stroke-width="2.5" rx="12" ry="12"></rect>
+  <text x="337.249" y="159.425" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 9.1px;">GNN Module</text>
+  <rect x="287.249" y="166.243" width="100" height="56.818" fill="#c7e9b4" stroke="#2c7fb8" stroke-width="1.5" rx="8" ry="8"></rect>
+  <text x="337.249" y="177.607" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 7.3px;">GAT Convolution Layers</text>
+  <text x="337.249" y="186.698" font-family="Arial" font-size="14" text-anchor="middle" style="white-space: pre; font-size: 6.4px;">(3 layers)</text>
+  <line x1="296.34" y1="191.243" x2="378.158" y2="191.243" stroke="#2c7fb8" stroke-width="1" stroke-dasharray="3,3"></line>
+  <text x="337.249" y="200.334" font-family="Arial" font-size="14" text-anchor="middle" style="white-space: pre; font-size: 6.4px;">First &amp; Middle: 4 Attention Heads</text>
+  <line x1="296.34" y1="204.88" x2="378.158" y2="204.88" stroke="#2c7fb8" stroke-width="1" stroke-dasharray="3,3"></line>
+  <text x="337.249" y="213.971" font-family="Arial" font-size="14" text-anchor="middle" style="white-space: pre; font-size: 6.4px;">Final: 1 Head + Layer Norm</text>
+  <rect x="125.885" y="238.971" width="122.727" height="36.364" fill="#ffeda0" stroke="#feb24c" stroke-width="2.5" ry="12" rx="12"></rect>
+  <text x="187.249" y="254.88" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 8.2px;">Physics-Based Loss</text>
+  <text x="187.249" y="266.243" font-family="Arial" font-size="14" text-anchor="middle" style="white-space: pre; font-size: 6.4px;">Enhances model with physical constraints</text>
+  <rect x="275.885" y="238.971" width="122.727" height="36.364" fill="#bfd3e6" stroke="#8c96c6" stroke-width="2.5" rx="12" ry="12"></rect>
+  <text x="337.249" y="254.88" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 8.2px;">Uncertainty Estimation</text>
+  <text x="337.249" y="266.243" font-family="Arial" font-size="14" text-anchor="middle" style="white-space: pre; font-size: 6.4px;">Monte Carlo Dropout (20 samples)</text>
+  <rect x="125.885" y="285.971" width="272.727" height="31.818" fill="#f7fcf5" stroke="#41ab5d" stroke-width="2.5" rx="12" ry="12"></rect>
+  <text x="262.249" y="298.062" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 9.1px;">Feature Concatenation</text>
+  <text x="262.249" y="309.425" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 7.3px;">(LSTM + GNN Features)</text>
+  <rect x="125.885" y="329.88" width="272.727" height="54.545" fill="#fee8c8" stroke="#e34a33" stroke-width="2.5" rx="12" ry="12"></rect>
+  <text x="262.249" y="341.243" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 9.1px;">Attention Module</text>
+  <rect x="148.613" y="348.062" width="227.273" height="27.273" fill="#fdbb84" stroke="#e34a33" stroke-width="1.5" rx="8" ry="8"></rect>
+  <text x="262.249" y="359.425" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 7.3px;">Multi-Head Self-Attention (8 heads)</text>
+  <text x="262.249" y="370.789" font-family="Arial" font-size="14" text-anchor="middle" style="white-space: pre; font-size: 6.4px;">Query, Key, Value Projections + Output Projection</text>
+  <rect x="125.885" y="393.516" width="272.727" height="54.545" fill="#f2f0f7" stroke="#807dba" stroke-width="2.5" rx="12" ry="12"></rect>
+  <text x="262.249" y="404.88" font-family="Arial" font-size="20" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 9.1px;">Fully Connected Layers</text>
+  <text x="262.249" y="418.516" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 7.3px;">Linear Layer with ReLU Activation</text>
+  <line x1="171.34" y1="425.334" x2="353.158" y2="425.334" stroke="#807dba" stroke-width="1" stroke-dasharray="5,5"></line>
+  <text x="262.249" y="436.698" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 7.3px;">Dropout (0.2) + Linear Output Layer</text>
+  <rect x="125.885" y="457.152" width="272.727" height="31.818" fill="#3182bd" stroke="#08519c" stroke-width="2.5" rx="12" ry="12"></rect>
+  <text x="262.249" y="473.062" font-family="Arial" font-size="22" text-anchor="middle" font-weight="bold" fill="white" style="white-space: pre; font-size: 10px;">Temperature Bias Prediction</text>
+  <text x="262.249" y="484.425" font-family="Arial" font-size="14" text-anchor="middle" fill="white" style="white-space: pre; font-size: 6.4px;">Final Model Output</text>
+</svg>

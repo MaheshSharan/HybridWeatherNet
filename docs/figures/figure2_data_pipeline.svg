@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:export></bx:export>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"></polygon>
+    </marker>
+  </defs>
+  <rect width="500" height="312.5" fill="#f8f9fa" rx="10" ry="10" x="0.265" y="21.315"></rect>
+  <text x="249.559" y="40.77" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 15px;">Data Pipeline Workflow</text>
+  <g transform="matrix(1, 0, 0, 1, -21.854073, 12.689454)">
+    <rect x="30.81" y="72.02" width="100" height="43.75" fill="#e3f2fd" stroke="#1565c0" stroke-width="2" rx="5" ry="5"></rect>
+    <text x="80.81" y="90.77" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">OpenMeteo API</text>
+    <text x="80.81" y="103.27" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Weather Forecasts</text>
+    <rect x="30.81" y="134.52" width="100" height="43.75" fill="#e3f2fd" stroke="#1565c0" stroke-width="2" rx="5" ry="5"></rect>
+    <text x="80.81" y="153.27" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">ISD Database</text>
+    <text x="80.81" y="165.77" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Weather Observations</text>
+  </g>
+  <g transform="matrix(1, 0, 0, 1, -5.344741, 14.804373)">
+    <rect x="168.309" y="72.02" width="100" height="43.75" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" rx="5" ry="5"></rect>
+    <text x="218.309" y="90.77" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">OpenMeteo</text>
+    <text x="218.309" y="103.27" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Downloader</text>
+  </g>
+  <g transform="matrix(1, 0, 0, 1, -5.639782, 25.378937)">
+    <rect x="168.309" y="134.52" width="100" height="43.75" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" rx="5" ry="5"></rect>
+    <text x="218.309" y="153.27" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">ISD-Lite</text>
+    <text x="218.309" y="165.77" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Downloader</text>
+  </g>
+  <g transform="matrix(1, 0, 0, 1, -4.934794, 33.838608)">
+    <rect x="168.309" y="197.02" width="100" height="43.75" fill="#fff3e0" stroke="#e65100" stroke-width="2" rx="5" ry="5"></rect>
+    <text x="218.309" y="215.77" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">Raw Data</text>
+    <text x="218.309" y="228.27" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Storage</text>
+  </g>
+  <g transform="matrix(1, 0, 0, 1, -7.754686, -31.723635)">
+    <rect x="305.809" y="134.52" width="100" height="43.75" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" rx="5" ry="5"></rect>
+    <text x="355.809" y="153.27" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">Data Aligner</text>
+    <text x="355.809" y="165.77" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Temporal &amp; Spatial</text>
+    <rect x="305.809" y="197.02" width="100" height="43.75" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" rx="5" ry="5"></rect>
+    <text x="355.809" y="215.77" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">Feature Engineering</text>
+    <text x="355.809" y="228.27" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">&amp; Quality Control</text>
+    <rect x="305.809" y="259.52" width="100" height="43.75" fill="#e8eaf6" stroke="#3f51b5" stroke-width="2" rx="5" ry="5"></rect>
+    <text x="355.809" y="278.27" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">Processed Data</text>
+    <text x="355.809" y="290.77" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Ready for Training</text>
+  </g>
+  <line x1="119.53" y1="107.289" x2="157.029" y2="107.289" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"></line>
+  <line x1="118.826" y1="171.199" x2="156.325" y2="171.199" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"></line>
+  <line x1="214.079" y1="136.215" x2="214.079" y2="154.723" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)" style=""></line>
+  <line x1="213.489" y1="207.879" x2="213.489" y2="226.629" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"></line>
+  <line x1="263.374" y1="230.175" x2="293.119" y2="126.787" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)" style=""></line>
+  <line x1="348.759" y1="146.956" x2="348.759" y2="165.706" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"></line>
+  <line x1="350.874" y1="220.326" x2="350.874" y2="227.796" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)" style=""></line>
+  <g transform="matrix(1, 0, 0, 1, 16.214331, 14.099453)">
+    <rect x="405.809" y="72.02" width="62.5" height="18.75" fill="none" stroke="#666" stroke-width="1" rx="5" ry="5"></rect>
+    <text x="437.059" y="84.52" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">1. Data Collection</text>
+    <rect x="405.809" y="97.02" width="62.5" height="18.75" fill="none" stroke="#666" stroke-width="1" rx="5" ry="5"></rect>
+    <text x="437.059" y="109.52" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">2. Data Storage</text>
+    <rect x="405.809" y="197.02" width="62.5" height="18.75" fill="none" stroke="#666" stroke-width="1" rx="5" ry="5"></rect>
+    <text x="437.059" y="209.52" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">6. Quality Control</text>
+    <rect x="405.809" y="222.02" width="62.5" height="18.75" fill="none" stroke="#666" stroke-width="1" rx="5" ry="5"></rect>
+    <text x="437.059" y="234.52" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">7. Normalization</text>
+    <rect x="405.809" y="247.02" width="62.5" height="18.75" fill="none" stroke="#666" stroke-width="1" rx="5" ry="5"></rect>
+    <text x="437.059" y="259.52" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">8. Train/Val Split</text>
+  </g>
+  <g transform="matrix(1, 0, 0, 1, 0.704959, -3.52485)">
+    <rect x="407.924" y="140.349" width="78.009" height="18.75" fill="none" stroke="#666" stroke-width="1" rx="5" ry="5" style=""></rect>
+    <g>
+      <text x="447.339" y="151.734" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">3. Temporal Alignment</text>
+    </g>
+  </g>
+  <g transform="matrix(1, 0, 0, 1, 17.624249, 14.919291)">
+    <rect x="402.284" y="147.02" width="67.435" height="18.75" fill="none" stroke="#666" stroke-width="1" rx="5" ry="5" style=""></rect>
+    <text x="437.059" y="159.52" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">4. Spatial Matching</text>
+  </g>
+  <rect x="419.908" y="189.644" width="68.14" height="18.75" fill="none" stroke="#666" stroke-width="1" rx="5" ry="5" style=""></rect>
+  <text x="454.684" y="202.144" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">5. Feature Creation</text>
+  <rect x="30.81" y="265.77" width="12.5" height="12.5" fill="#e3f2fd" stroke="#1565c0" stroke-width="2"></rect>
+  <text x="49.56" y="275.145" font-family="Arial" font-size="12" style="white-space: pre; font-size: 7.5px;">Data Sources</text>
+  <rect x="30.81" y="284.52" width="12.5" height="12.5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"></rect>
+  <text x="49.56" y="293.895" font-family="Arial" font-size="12" style="white-space: pre; font-size: 7.5px;">Data Acquisition</text>
+  <rect x="30.81" y="303.27" width="12.5" height="12.5" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"></rect>
+  <text x="49.56" y="312.645" font-family="Arial" font-size="12" style="white-space: pre; font-size: 7.5px;">Data Processing</text>
+  <g transform="matrix(1, 0, 0, 1, -2.114905, 18.329262)">
+    <rect x="124.56" y="265.77" width="12.5" height="12.5" fill="#fff3e0" stroke="#e65100" stroke-width="2"></rect>
+    <text x="143.31" y="275.145" font-family="Arial" font-size="12" style="white-space: pre; font-size: 7.5px;">Intermediate Storage</text>
+    <rect x="124.56" y="284.52" width="12.5" height="12.5" fill="#e8eaf6" stroke="#3f51b5" stroke-width="2"></rect>
+    <text x="143.31" y="293.895" font-family="Arial" font-size="12" style="white-space: pre; font-size: 7.5px;">Final Dataset</text>
+  </g>
+</svg>

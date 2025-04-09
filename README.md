@@ -94,11 +94,7 @@ For users with limited computational resources, we provide Google Colab support:
 
 ## 📊 Model Architecture
 
-```
-Input Data → LSTM Module → Graph Neural Network → Attention Fusion → Bias Prediction
-                                                                 ↓
-                                                    Uncertainty Estimation
-```
+![Model Architecture](model_architecture.svg)
 
 ## 📈 Performance
 
@@ -125,26 +121,6 @@ date,temperature,humidity,wind_speed_model,wind_direction_model,cloud_cover_low,
 ```
 
 The model will predict the bias in the temperature forecast, which can then be applied to correct the original forecast.
-
-## 🗂️ Project Structure
-
-```
-weather_bias_correction/
-├── data/               # Data storage
-│   ├── raw/            # Raw weather data
-│   └── processed/      # Processed and aligned data
-├── logs/               # Training logs and model checkpoints
-├── notebooks/          # Jupyter notebooks
-├── src/                # Source code
-│   ├── app/            # Streamlit application
-│   ├── data/           # Data processing
-│   ├── models/         # Model architecture
-│   ├── training/       # Training scripts
-│   └── utils/          # Utility functions
-├── tests/              # Unit tests
-├── requirements.txt    # Dependencies
-└── setup.py            # Package setup
-```
 
 ## 📝 Citation
 

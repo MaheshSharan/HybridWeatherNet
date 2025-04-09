@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="900" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="900" height="600" fill="#f8f9fa" rx="10" ry="10"/>
+  <text x="450" y="30" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold">Streamlit Application Interface and Workflow</text>
+  
+  <!-- App Interface -->
+  <rect x="50" y="70" width="500" height="480" fill="#ffffff" stroke="#cccccc" stroke-width="2" rx="5" ry="5"/>
+  
+  <!-- App Header -->
+  <rect x="50" y="70" width="500" height="60" fill="#ff4b4b" rx="5" ry="5"/>
+  <text x="300" y="110" font-family="Arial" font-size="20" text-anchor="middle" fill="white" font-weight="bold">Weather Bias Correction System</text>
+  
+  <!-- Sidebar -->
+  <rect x="50" y="130" width="120" height="420" fill="#f0f2f6" stroke="#cccccc" stroke-width="1"/>
+  <text x="110" y="155" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">Navigation</text>
+  
+  <rect x="60" y="170" width="100" height="30" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="5" ry="5"/>
+  <text x="110" y="190" font-family="Arial" font-size="12" text-anchor="middle">Home</text>
+  
+  <rect x="60" y="210" width="100" height="30" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="5" ry="5"/>
+  <text x="110" y="230" font-family="Arial" font-size="12" text-anchor="middle">Upload Data</text>
+  
+  <rect x="60" y="250" width="100" height="30" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="5" ry="5"/>
+  <text x="110" y="270" font-family="Arial" font-size="12" text-anchor="middle">Run Model</text>
+  
+  <rect x="60" y="290" width="100" height="30" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="5" ry="5"/>
+  <text x="110" y="310" font-family="Arial" font-size="12" text-anchor="middle">Results</text>
+  
+  <rect x="60" y="330" width="100" height="30" fill="#e3f2fd" stroke="#1565c0" stroke-width="1" rx="5" ry="5"/>
+  <text x="110" y="350" font-family="Arial" font-size="12" text-anchor="middle">About</text>
+  
+  <!-- Main Content -->
+  <rect x="180" y="130" width="360" height="420" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  
+  <!-- File Upload Section -->
+  <text x="360" y="155" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Upload Weather Data</text>
+  
+  <rect x="200" y="170" width="320" height="80" fill="#f5f5f5" stroke="#cccccc" stroke-width="1" rx="5" ry="5" stroke-dasharray="5,5"/>
+  <text x="360" y="210" font-family="Arial" font-size="14" text-anchor="middle">Drag and Drop CSV Files Here</text>
+  <text x="360" y="230" font-family="Arial" font-size="12" text-anchor="middle">or Click to Browse</text>
+  
+  <!-- Model Parameters -->
+  <text x="360" y="280" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Model Parameters</text>
+  
+  <rect x="200" y="300" width="150" height="30" fill="#f5f5f5" stroke="#cccccc" stroke-width="1"/>
+  <text x="275" y="320" font-family="Arial" font-size="12" text-anchor="middle">Forecast Column:</text>
+  
+  <rect x="360" y="300" width="160" height="30" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="440" y="320" font-family="Arial" font-size="12" text-anchor="middle">temperature_2m</text>
+  
+  <rect x="200" y="340" width="150" height="30" fill="#f5f5f5" stroke="#cccccc" stroke-width="1"/>
+  <text x="275" y="360" font-family="Arial" font-size="12" text-anchor="middle">Observation Column:</text>
+  
+  <rect x="360" y="340" width="160" height="30" fill="#ffffff" stroke="#cccccc" stroke-width="1"/>
+  <text x="440" y="360" font-family="Arial" font-size="12" text-anchor="middle">temp</text>
+  
+  <!-- Run Button -->
+  <rect x="300" y="390" width="120" height="40" fill="#4CAF50" stroke="#2E7D32" stroke-width="1" rx="5" ry="5"/>
+  <text x="360" y="415" font-family="Arial" font-size="14" text-anchor="middle" fill="white" font-weight="bold">Run Model</text>
+  
+  <!-- Results Section -->
+  <text x="360" y="460" font-family="Arial" font-size="16" text-anchor="middle" font-weight="bold">Results</text>
+  
+  <rect x="200" y="480" width="320" height="60" fill="#e8f5e9" stroke="#2e7d32" stroke-width="1" rx="5" ry="5"/>
+  <text x="360" y="500" font-family="Arial" font-size="14" text-anchor="middle">Mean Bias: 0.3027°C</text>
+  <text x="360" y="520" font-family="Arial" font-size="14" text-anchor="middle">RMSE: 0.4537°C | MAE: 0.4123°C</text>
+  
+  <!-- App Workflow -->
+  <rect x="580" y="70" width="270" height="480" fill="#ffffff" stroke="#cccccc" stroke-width="2" rx="5" ry="5"/>
+  <text x="715" y="100" font-family="Arial" font-size="18" text-anchor="middle" font-weight="bold">Application Workflow</text>
+  
+  <!-- Workflow Steps -->
+  <rect x="600" y="120" width="230" height="60" fill="#e3f2fd" stroke="#1565c0" stroke-width="2" rx="5" ry="5"/>
+  <text x="715" y="145" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">1. Data Upload</text>
+  <text x="715" y="165" font-family="Arial" font-size="12" text-anchor="middle">CSV files with forecast and observation data</text>
+  
+  <line x1="715" y1="180" x2="715" y2="200" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <rect x="600" y="200" width="230" height="60" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" rx="5" ry="5"/>
+  <text x="715" y="225" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">2. Data Processing</text>
+  <text x="715" y="245" font-family="Arial" font-size="12" text-anchor="middle">Column mapping and normalization</text>
+  
+  <line x1="715" y1="260" x2="715" y2="280" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <rect x="600" y="280" width="230" height="60" fill="#fff3e0" stroke="#e65100" stroke-width="2" rx="5" ry="5"/>
+  <text x="715" y="305" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">3. Model Inference</text>
+  <text x="715" y="325" font-family="Arial" font-size="12" text-anchor="middle">Bias prediction with uncertainty estimation</text>
+  
+  <line x1="715" y1="340" x2="715" y2="360" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <rect x="600" y="360" width="230" height="60" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" rx="5" ry="5"/>
+  <text x="715" y="385" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">4. Bias Correction</text>
+  <text x="715" y="405" font-family="Arial" font-size="12" text-anchor="middle">Apply predicted bias to original forecast</text>
+  
+  <line x1="715" y1="420" x2="715" y2="440" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"/>
+  
+  <rect x="600" y="440" width="230" height="60" fill="#e8eaf6" stroke="#3f51b5" stroke-width="2" rx="5" ry="5"/>
+  <text x="715" y="465" font-family="Arial" font-size="14" text-anchor="middle" font-weight="bold">5. Visualization</text>
+  <text x="715" y="485" font-family="Arial" font-size="12" text-anchor="middle">Interactive plots and performance metrics</text>
+  
+  <!-- Arrow marker definition -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"/>
+    </marker>
+  </defs>
+  
+  <!-- Performance Metrics -->
+  <rect x="50" y="560" width="800" height="30" fill="#f0f2f6" stroke="#cccccc" stroke-width="1" rx="5" ry="5"/>
+  <text x="450" y="580" font-family="Arial" font-size="14" text-anchor="middle">Performance on Amsterdam Data (March 2025): Mean Bias: 0.3027°C | RMSE: 0.4537°C | MAE: 0.4123°C</text>
+</svg>

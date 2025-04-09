@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#666"></polygon>
+    </marker>
+    <bx:export>
+      <bx:file format="png" href="#object-0"></bx:file>
+    </bx:export>
+  </defs>
+  <g>
+    <rect width="500" height="312.5" fill="#f8f9fa" rx="10" ry="10" x="0.97" y="77.007" id="object-0"></rect>
+    <text x="271.414" y="96.462" font-family="Arial" font-size="24" text-anchor="middle" font-weight="bold" style="white-space: pre; font-size: 15px;">Weather Bias Correction Model Architecture</text>
+    <g>
+      <rect x="21.645" y="126.302" width="112.5" height="50" fill="#e3f2fd" stroke="#1565c0" stroke-width="2" rx="5" ry="5"></rect>
+      <text x="75.78" y="145.967" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">Input Weather Data</text>
+      <text x="79.305" y="161.992" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">(Forecast + Observation)</text>
+    </g>
+    <g>
+      <rect x="25.17" y="211.266" width="112.5" height="37.5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" rx="5" ry="5"></rect>
+      <text x="80.01" y="233.846" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">Normalization Layer</text>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, -13.394414, -22.559044)">
+      <rect x="208.914" y="152.712" width="100" height="50" fill="#fff3e0" stroke="#e65100" stroke-width="2" rx="5" ry="5"></rect>
+      <text x="258.914" y="171.462" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">LSTM Module</text>
+      <text x="258.914" y="183.962" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Temporal Patterns</text>
+      <text x="258.914" y="196.462" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Bidirectional</text>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, -13.394414, -15.509345)">
+      <rect x="208.914" y="227.712" width="100" height="50" fill="#e1f5fe" stroke="#0277bd" stroke-width="2" rx="5" ry="5"></rect>
+      <text x="258.914" y="246.462" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">GNN Module</text>
+      <text x="258.914" y="258.962" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Spatial Relationships</text>
+      <text x="258.914" y="271.462" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Graph Attention</text>
+    </g>
+    <g transform="matrix(1.056398, 0, 0, 1, -22.356938, -15.509345)" style="">
+      <rect x="346.414" y="190.212" width="100" height="50" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2" rx="5" ry="5"></rect>
+      <text x="396.414" y="208.962" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">Attention Fusion</text>
+      <text x="396.414" y="221.462" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Multi-Head</text>
+      <text x="396.414" y="233.962" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Self-Attention</text>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, 2.819836, -4.934769)">
+      <rect x="346.414" y="265.212" width="100" height="37.5" fill="#ffebee" stroke="#c62828" stroke-width="2" rx="5" ry="5"></rect>
+      <text x="396.414" y="287.087" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">Output Layer</text>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, 4.229863, 9.164524)">
+      <rect x="340.069" y="321.462" width="111.985" height="37.5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2" rx="5" ry="5" style=""></rect>
+      <text x="396.414" y="343.337" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">Denormalization Layer</text>
+    </g>
+    <g transform="matrix(1, 0, 0, 1, -35.953457, -18.329251)">
+      <rect x="383.914" y="127.712" width="112.5" height="50" fill="#e8eaf6" stroke="#3f51b5" stroke-width="2" rx="5" ry="5"></rect>
+      <text x="440.164" y="155.837" font-family="Arial" font-size="16" text-anchor="middle" style="white-space: pre; font-size: 10px;">Temperature Bias</text>
+      <text x="440.164" y="168.337" font-family="Arial" font-size="12" text-anchor="middle" style="white-space: pre; font-size: 7.5px;">Prediction</text>
+    </g>
+    <line x1="75.075" y1="184.762" x2="75.075" y2="203.512" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"></line>
+    <g>
+      <line x1="143.31" y1="192.653" x2="187.06" y2="155.153" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"></line>
+      <line x1="142.605" y1="192.653" x2="186.355" y2="230.153" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"></line>
+    </g>
+    <g>
+      <line x1="300.454" y1="159.383" x2="337.954" y2="196.883" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"></line>
+      <line x1="300.454" y1="236.498" x2="337.954" y2="198.998" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"></line>
+    </g>
+    <line x1="392.889" y1="233.867" x2="392.889" y2="258.867" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"></line>
+    <line x1="394.299" y1="308.762" x2="394.299" y2="327.512" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)"></line>
+    <path d="M 491.123 139.952 C 468.872 139.952 457.747 178.12 457.747 254.455 C 457.747 330.791 466.647 353.242 484.448 321.81" fill="none" stroke="#666" stroke-width="2" marker-end="url(#arrowhead)" style="transform-box: fill-box; transform-origin: 50% 50%;" transform="matrix(-1, 0, 0, -1, -0.000045, 0.000001)"></path>
+    <rect x="52.664" y="321.462" width="12.5" height="12.5" fill="#fff3e0" stroke="#e65100" stroke-width="2"></rect>
+    <text x="71.414" y="330.837" font-family="Arial" font-size="12" style="white-space: pre; font-size: 7.5px;">Temporal Processing</text>
+    <rect x="52.664" y="340.212" width="12.5" height="12.5" fill="#e1f5fe" stroke="#0277bd" stroke-width="2"></rect>
+    <text x="71.414" y="349.587" font-family="Arial" font-size="12" style="white-space: pre; font-size: 7.5px;">Spatial Processing</text>
+    <rect x="52.664" y="358.962" width="12.5" height="12.5" fill="#f3e5f5" stroke="#7b1fa2" stroke-width="2"></rect>
+    <text x="71.414" y="368.337" font-family="Arial" font-size="12" style="white-space: pre; font-size: 7.5px;">Feature Fusion</text>
+    <rect x="177.664" y="321.462" width="12.5" height="12.5" fill="#e8f5e9" stroke="#2e7d32" stroke-width="2"></rect>
+    <text x="196.414" y="330.837" font-family="Arial" font-size="12" style="white-space: pre; font-size: 7.5px;">Data Transformation</text>
+    <rect x="177.664" y="340.212" width="12.5" height="12.5" fill="#ffebee" stroke="#c62828" stroke-width="2"></rect>
+    <text x="196.414" y="349.587" font-family="Arial" font-size="12" style="white-space: pre; font-size: 7.5px;">Prediction</text>
+  </g>
+</svg>
