@@ -1,4 +1,3 @@
-# src/models/attention_module.py
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -24,9 +23,9 @@ class AttentionModule(nn.Module):
         batch_size, seq_len, input_dim = x.size()
         assert input_dim == self.input_dim, f"Expected input_dim {self.input_dim}, got {input_dim}"
         
-        q = self.query(x)
-        k = self.key(x)
-        v = self.value(x)
+        q = self.query(x)  # [batch_size, seq_len, input_dim]
+        k = self.key(x)    # [batch_size, seq_len, input_dim]
+        v = self.value(x)  # [batch_size, seq_len, input_dim]
         
         q = q.view(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)
         k = k.view(batch_size, seq_len, self.num_heads, self.head_dim).transpose(1, 2)

@@ -43,8 +43,4 @@ def get_config():
         'model': MODEL_CONFIG,
         'training': TRAINING_CONFIG,
         'logging': LOGGING_CONFIG,
-<<<<<<< HEAD
     }
-=======
-    }
->>>>>>> 6cad13beaf46e95cfe50d175ce9749b836421401

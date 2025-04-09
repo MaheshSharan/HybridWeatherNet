@@ -7,6 +7,7 @@ from functools import lru_cache
 
 from src.models import DeepBiasCorrectionModel
 from src.training.config import get_config
+from src.utils.normalization import load_normalization_params, denormalize_target
 
 # Configure logging
 logging.basicConfig(
@@ -27,7 +28,8 @@ class ModelServer:
         self,
         model_path: str,
         device: Optional[str] = None,
-        cache_size: int = 100
+        cache_size: int = 100,
+        norm_params_path: Optional[str] = None
     ):
         """
         Initialize the model server.
@@ -36,6 +38,7 @@ class ModelServer:
             model_path (str): Path to the model checkpoint
             device (Optional[str]): Device to run the model on
             cache_size (int): Size of the prediction cache (unused now)
+            norm_params_path (Optional[str]): Path to normalization parameters file
         """
         self.model_path = model_path
         self.device = device or ('cuda' if torch.cuda.is_available() else 'cpu')
@@ -44,6 +47,23 @@ class ModelServer:
         # Load and optimize model
         self.model = self._load_model()
         self.model = self._optimize_model()
+        
+        # Load normalization parameters
+        if norm_params_path is None:
+            # Try to find normalization parameters in the same directory as the model
+            model_dir = os.path.dirname(os.path.abspath(model_path))
+            potential_norm_path = os.path.join(os.path.dirname(model_dir), "normalization_params.json")
+            if os.path.exists(potential_norm_path):
+                norm_params_path = potential_norm_path
+        
+        self.norm_params = None
+        if norm_params_path and os.path.exists(norm_params_path):
+            try:
+                self.norm_params = load_normalization_params(norm_params_path)
+                logger.info(f"Loaded normalization parameters from {norm_params_path}")
+                logger.info(f"Target mean: {self.norm_params['target_mean']}, Target std: {self.norm_params['target_std']}")
+            except Exception as e:
+                logger.warning(f"Failed to load normalization parameters: {str(e)}")
         
         logger.info(f"Model server initialized on device: {self.device}")
     
@@ -146,6 +166,22 @@ class ModelServer:
             
             predictions = np.concatenate(predictions_list, axis=0)
             uncertainty = np.concatenate(uncertainty_list, axis=0) if return_uncertainty else None
+            
+            # Apply denormalization if normalization parameters are available
+            if self.norm_params is not None:
+                logger.info("Denormalizing predictions using saved normalization parameters")
+                predictions = denormalize_target(
+                    predictions, 
+                    self.norm_params['target_mean'], 
+                    self.norm_params['target_std']
+                )
+                if uncertainty is not None:
+                    # Scale uncertainty by target_std
+                    uncertainty = uncertainty * (self.norm_params['target_std'] ** 2)
+                logger.info(f"Denormalized prediction range: {np.min(predictions)} to {np.max(predictions)}")
+            else:
+                logger.warning("No normalization parameters available. Predictions may be in normalized space!")
+            
             logger.info(f"Prediction complete: output shape {predictions.shape}")
             return predictions, uncertainty
         

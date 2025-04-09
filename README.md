@@ -59,13 +59,31 @@ A deep learning approach for correcting systematic biases in weather forecasts u
 
 4. **Train the model**
    ```bash
-   python src/training/train.py --data_dir data/processed
+   python src/training/train.py --data_dir data/processed --accelerator cpu --experiment_name my_training_run
+   ```
+
+   Additional training options:
+   ```bash
+   python src/training/train.py --data_dir data/processed --accelerator gpu --batch_size 64 --max_epochs 100 --hidden_dim 256 --bidirectional True --experiment_name advanced_training
    ```
 
 5. **Run the web interface**
    ```bash
    streamlit run src/app/app.py
    ```
+
+   When using the Streamlit interface:
+   - Set the model path to: `logs\pc_training_corrected_v5\checkpoints\bias_correction-epoch=19-val_loss=0.00.ckpt`
+   - Click "Load Model" to initialize the model
+   - Upload a CSV file containing weather forecast data
+   - Required CSV columns (any of these naming conventions will work):
+     - Temperature: `temperature`, `temp`, `temperature_2m`
+     - Humidity: `humidity`, `relative_humidity_2m`, `relative_humidity`
+     - Wind speed: `wind_speed`, `wind_speed_model`, `wind_speed_10m`
+     - Wind direction: `wind_direction`, `wind_direction_model`, `wind_direction_10m`
+     - Cloud cover: `cloud_cover_low`, `cloud_cover_mid`, `cloud_cover_high`
+   - Click "Process Data" to generate bias-corrected forecasts
+   - View results in the "Temperature Forecast," "Bias Analysis," and "Uncertainty" tabs
 
 ## 🖥️ Google Colab Support
 
@@ -84,26 +102,48 @@ Input Data → LSTM Module → Graph Neural Network → Attention Fusion → Bia
 
 ## 📈 Performance
 
-- Significant reduction in systematic temperature forecast errors
-- Improved statistical metrics (MAE/RMSE)
-- Reliable uncertainty estimates
-- Physics-consistent corrections
+- **Temperature Bias Correction**:
+  - Mean Bias: 0.27°C
+  - RMSE: 0.54°C
+  - MAE: 0.32°C
+
+- **Key Advantages**:
+  - Accurate bias prediction with proper denormalization
+  - Reliable uncertainty estimates
+  - Physics-consistent corrections
+  - Support for various weather data formats
+
+## 🔍 Example Data Format
+
+Here's an example of the expected CSV format (column names may vary as noted in the Streamlit instructions):
+
+```
+date,temperature,humidity,wind_speed_model,wind_direction_model,cloud_cover_low,cloud_cover_mid,cloud_cover_high
+2018-01-01,6.66,83.17,23.93,226.75,45.5,49.42,60.54
+2018-01-02,5.85,87.46,18.15,241.50,46.21,46.58,54.25
+2018-01-03,8.02,80.42,38.76,252.33,48.21,59.17,42.13
+```
+
+The model will predict the bias in the temperature forecast, which can then be applied to correct the original forecast.
 
 ## 🗂️ Project Structure
 
 ```
 weather_bias_correction/
 ├── data/               # Data storage
-├── docs/              # Documentation
-├── notebooks/         # Jupyter notebooks
-├── src/              # Source code
-│   ├── app/          # Streamlit application
-│   ├── data/         # Data processing
-│   ├── models/       # Model architecture
-│   └── training/     # Training scripts
-├── tests/            # Unit tests
-├── requirements.txt  # Dependencies
-└── setup.py         # Package setup
+│   ├── raw/            # Raw weather data
+│   └── processed/      # Processed and aligned data
+├── logs/               # Training logs and model checkpoints
+├── notebooks/          # Jupyter notebooks
+├── src/                # Source code
+│   ├── app/            # Streamlit application
+│   ├── data/           # Data processing
+│   ├── models/         # Model architecture
+│   ├── training/       # Training scripts
+│   └── utils/          # Utility functions
+├── tests/              # Unit tests
+├── requirements.txt    # Dependencies
+└── setup.py            # Package setup
 ```
 
 ## 📝 Citation

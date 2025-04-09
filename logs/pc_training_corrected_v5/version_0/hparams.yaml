@@ -1,0 +1,10 @@
+bidirectional: true
+dropout_rate: 0.2
+hidden_dim: 256
+input_dim: 7
+learning_rate: 0.001
+num_layers: 3
+num_mc_samples: 20
+output_dim: 1
+physics_weight: 0.1
+weight_decay: 1.0e-05

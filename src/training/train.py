@@ -5,9 +5,11 @@ import pytorch_lightning as pl
 from pytorch_lightning.callbacks import ModelCheckpoint, EarlyStopping
 from pytorch_lightning.loggers import TensorBoardLogger
 import logging
+from typing import Dict, Any, List, Tuple
 
-from src.data.weather_data_module import WeatherDataModule
 from src.models.bias_correction_model import DeepBiasCorrectionModel
+from src.data.weather_data_module import WeatherDataModule
+from src.utils.normalization import save_normalization_params
 from src.training.config import get_config
 
 # Set up logging
@@ -104,6 +106,22 @@ def train_model(args):
     
     # Train the model
     trainer.fit(model, data_module)
+    
+    # Save normalization parameters
+    data_module.setup()  # Ensure datasets are set up
+    # Get the first dataset to extract normalization parameters
+    first_dataset = data_module.train_datasets[0].dataset
+    
+    # Save normalization parameters
+    norm_params_path = os.path.join(config['logging']['log_dir'], args.experiment_name, "normalization_params.json")
+    save_normalization_params(
+        target_mean=first_dataset.target_mean,
+        target_std=first_dataset.target_std,
+        feature_means=first_dataset.feature_means,
+        feature_stds=first_dataset.feature_stds,
+        save_path=norm_params_path
+    )
+    logger.info(f"Saved normalization parameters to {norm_params_path}")
     
     return trainer, model, data_module
 
