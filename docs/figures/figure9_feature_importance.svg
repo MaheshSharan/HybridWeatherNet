@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <linearGradient id="barGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0" style="stop-color:#4364e8;stop-opacity:1"></stop>
+      <stop offset="1" style="stop-color:#7a9ff0;stop-opacity:1"></stop>
+    </linearGradient>
+  </defs>
+  <rect width="500" height="312.5" fill="#f8f9fa" rx="15" ry="15" x="0.264" y="93.927"></rect>
+  <text x="250.264" y="125.177" font-family="Inter, Arial, sans-serif" font-size="24" text-anchor="middle" font-weight="bold" fill="#333333" style="white-space: pre; font-size: 15px;">Feature Importance Analysis</text>
+  <text x="250.264" y="143.927" font-family="Inter, Arial, sans-serif" font-size="16" text-anchor="middle" fill="#666666" style="white-space: pre; font-size: 10px;">Based on Attention Weights</text>
+  <rect x="56.514" y="150.177" width="387.5" height="200" fill="white" rx="10" ry="10" stroke="#eeeeee" stroke-width="1"></rect>
+  <line x1="62.764" y1="343.927" x2="437.764" y2="343.927" stroke="#eeeeee" stroke-width="1"></line>
+  <line x1="62.764" y1="306.427" x2="437.764" y2="306.427" stroke="#eeeeee" stroke-width="1"></line>
+  <line x1="62.764" y1="268.926" x2="437.764" y2="268.926" stroke="#eeeeee" stroke-width="1"></line>
+  <line x1="62.764" y1="231.427" x2="437.764" y2="231.427" stroke="#eeeeee" stroke-width="1"></line>
+  <line x1="62.764" y1="193.927" x2="437.764" y2="193.926" stroke="#eeeeee" stroke-width="1"></line>
+  <line x1="62.764" y1="156.426" x2="437.764" y2="156.426" stroke="#eeeeee" stroke-width="1"></line>
+  <line x1="62.764" y1="343.927" x2="62.764" y2="156.426" stroke="#aaaaaa" stroke-width="1.5"></line>
+  <text x="31.25" y="150" font-family="Inter, Arial, sans-serif" font-size="14" text-anchor="middle" transform="matrix(0, -1, 1, 0, -118.485643, 275.176274)" fill="#555555" style="white-space: pre; font-size: 8.8px;">Relative Importance (%)</text>
+  <line x1="62.764" y1="343.927" x2="437.764" y2="343.927" stroke="#aaaaaa" stroke-width="1.5"></line>
+  <line x1="59.639" y1="343.926" x2="62.764" y2="343.926" stroke="#aaaaaa" stroke-width="1"></line>
+  <text x="53.389" y="347.052" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="end" fill="#666666" style="white-space: pre; font-size: 7.5px;">0</text>
+  <line x1="59.639" y1="306.426" x2="62.764" y2="306.426" stroke="#aaaaaa" stroke-width="1"></line>
+  <text x="53.389" y="309.552" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="end" fill="#666666" style="white-space: pre; font-size: 7.5px;">5</text>
+  <line x1="59.639" y1="268.926" x2="62.764" y2="268.926" stroke="#aaaaaa" stroke-width="1"></line>
+  <text x="53.389" y="272.052" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="end" fill="#666666" style="white-space: pre; font-size: 7.5px;">10</text>
+  <line x1="59.639" y1="231.427" x2="62.764" y2="231.427" stroke="#aaaaaa" stroke-width="1"></line>
+  <text x="53.389" y="234.552" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="end" fill="#666666" style="white-space: pre; font-size: 7.5px;">15</text>
+  <line x1="59.639" y1="193.927" x2="62.764" y2="193.926" stroke="#aaaaaa" stroke-width="1"></line>
+  <text x="53.389" y="197.052" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="end" fill="#666666" style="white-space: pre; font-size: 7.5px;">20</text>
+  <line x1="59.639" y1="156.427" x2="62.764" y2="156.427" stroke="#aaaaaa" stroke-width="1"></line>
+  <text x="53.389" y="159.552" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="end" fill="#666666" style="white-space: pre; font-size: 7.5px;">25</text>
+  <rect x="75.264" y="193.927" width="37.5" height="150" fill="url(#barGradient)" rx="6" ry="6"></rect>
+  <text x="94.014" y="350.177" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;">Forecast Temp</text>
+  <text x="150" y="430" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;"></text>
+  <text x="94.014" y="184.552" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="middle" font-weight="bold" fill="#333333" style="white-space: pre; font-size: 7.5px;">20.5%</text>
+  <rect x="125.264" y="206.427" width="37.5" height="137.5" fill="url(#barGradient)" rx="6" ry="6"></rect>
+  <text x="144.014" y="350.177" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;">Previous Day</text>
+  <text x="144.014" y="362.677" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;">Temp</text>
+  <text x="144.014" y="197.052" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="middle" font-weight="bold" fill="#333333" style="white-space: pre; font-size: 7.5px;">18.3%</text>
+  <rect x="175.264" y="218.927" width="37.5" height="125" fill="url(#barGradient)" rx="6" ry="6"></rect>
+  <text x="194.014" y="350.177" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;">Low Cloud</text>
+  <text x="194.014" y="362.677" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;">Cover</text>
+  <text x="194.014" y="209.552" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="middle" font-weight="bold" fill="#333333" style="white-space: pre; font-size: 7.5px;">16.7%</text>
+  <rect x="225.264" y="243.927" width="37.5" height="100" fill="url(#barGradient)" rx="6" ry="6"></rect>
+  <text x="244.014" y="350.177" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;">Humidity</text>
+  <text x="390" y="430" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;"></text>
+  <text x="244.014" y="234.552" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="middle" font-weight="bold" fill="#333333" style="white-space: pre; font-size: 7.5px;">13.3%</text>
+  <rect x="275.264" y="268.927" width="37.5" height="75" fill="url(#barGradient)" rx="6" ry="6"></rect>
+  <text x="294.014" y="350.177" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;">Wind Speed</text>
+  <text x="470" y="430" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;"></text>
+  <text x="294.014" y="259.552" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="middle" font-weight="bold" fill="#333333" style="white-space: pre; font-size: 7.5px;">10.0%</text>
+  <rect x="325.264" y="281.427" width="37.5" height="62.5" fill="url(#barGradient)" rx="6" ry="6"></rect>
+  <text x="344.014" y="350.177" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;">Mid Cloud</text>
+  <text x="344.014" y="362.677" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;">Cover</text>
+  <text x="344.014" y="272.052" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="middle" font-weight="bold" fill="#333333" style="white-space: pre; font-size: 7.5px;">8.3%</text>
+  <rect x="375.264" y="293.927" width="37.5" height="50" fill="url(#barGradient)" rx="6" ry="6"></rect>
+  <text x="394.014" y="350.177" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;">High Cloud</text>
+  <text x="394.014" y="362.677" font-family="Inter, Arial, sans-serif" font-size="11" text-anchor="middle" fill="#555555" style="white-space: pre; font-size: 6.9px;">Cover</text>
+  <text x="394.014" y="284.552" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="middle" font-weight="bold" fill="#333333" style="white-space: pre; font-size: 7.5px;">6.7%</text>
+  <g transform="matrix(1, 0, 0, 1, 33.838582, -58.512532)">
+    <rect x="332.45" y="163.992" width="106.25" height="37.5" fill="white" stroke="#eeeeee" stroke-width="1" rx="8" ry="8"></rect>
+    <rect x="341.415" y="175.492" width="12.5" height="12.5" fill="url(#barGradient)" rx="3" ry="3"></rect>
+    <text x="361.985" y="195.032" font-family="Inter, Arial, sans-serif" font-size="12" text-anchor="start" fill="#555555" style="white-space: pre; font-size: 7.5px;" transform="matrix(1, 0, 0, 1, -1.409972, -14.80436)">Based on Attentiion<tspan x="361.9849853515625" dy="1em">​</tspan>Mechaniism Weight</text>
+  </g>
+</svg>
