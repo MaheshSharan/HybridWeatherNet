@@ -135,6 +135,58 @@ If you use this code in your research, please cite:
 }
 ```
 
+## Model Performance Analysis
+
+### Current Performance Metrics
+- Amsterdam: Mean Bias -0.92°C, RMSE 1.30°C, MAE 1.12°C
+- India: Mean Bias 1.06°C, RMSE 1.64°C, MAE 1.45°C
+
+### Performance Analysis
+
+![Feature Correlations - Amsterdam](analysis_results/analysis_correlation_Amsterdam.png)
+*Feature correlations with bias in Amsterdam data*
+
+![Feature Correlations - India](analysis_results/analysis_correlation_India.png)
+*Feature correlations with bias in India data*
+
+#### Key Findings
+
+1. **Temperature Sensitivity**:
+   - High temperatures (RMSE: 2.01°C in India, 1.52°C in Amsterdam)
+   - Low temperatures (RMSE: 1.45°C in India, 1.29°C in Amsterdam)
+
+2. **Humidity Impact**:
+   - Low humidity conditions show higher errors:
+     * Amsterdam: RMSE 1.79°C (low) vs 0.95°C (high)
+     * India: RMSE 1.73°C (low) vs 1.27°C (high)
+
+3. **Wind Effects**:
+   - Regional variation in wind impact
+   - Amsterdam: Higher errors in high wind (RMSE 1.46°C)
+   - India: Better performance in high wind (RMSE 1.33°C)
+
+### Areas for Improvement
+
+For researchers looking to improve the model's accuracy:
+
+1. **Humidity Conditions**: 
+   - Focus on improving performance in low humidity conditions
+   - Consider adding derived features that combine humidity with temperature
+
+2. **Temperature Extremes**:
+   - Enhance model's ability to handle temperature extremes
+   - Particularly important for high temperatures in tropical regions
+
+3. **Regional Adaptation**:
+   - Consider the varying impact of wind across different regions
+   - Investigate region-specific meteorological patterns
+
+![Error Distribution - Amsterdam](analysis_results/analysis_error_distribution_Amsterdam.png)
+*Error distribution in Amsterdam predictions*
+
+![Error Distribution - India](analysis_results/analysis_error_distribution_India.png)
+*Error distribution in India predictions*
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

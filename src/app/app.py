@@ -55,7 +55,7 @@ def load_model(model_path: str) -> ModelServer:
         logger.error(f"Error loading model: {str(e)}")
         raise
 
-def process_data(data: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
+def process_data(data: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray, Optional[np.ndarray]]:
     """
     Process the uploaded data for prediction.
     
@@ -63,20 +63,32 @@ def process_data(data: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
         data (pd.DataFrame): Uploaded data
         
     Returns:
-        Tuple[np.ndarray, np.ndarray]: Processed features and timestamps
+        Tuple[np.ndarray, np.ndarray, Optional[np.ndarray]]: 
+            - Processed features
+            - Timestamps
+            - Actual temperatures (if available, else None)
     """
     try:
+        # Debug logging
+        logger.info(f"Input data columns: {data.columns.tolist()}")
+        logger.info(f"Input data sample:\n{data.head()}")
+        
         # Map of possible column names to standardized names
         column_mapping = {
-            # Temperature
+            # Temperature (forecast)
             'temperature': 'temperature',
             'temp': 'temperature',
             'temperature_2m': 'temperature',
+            
+            # Temperature (actual)
+            'temp_avg': 'actual_temperature',
+            'temperature_obs': 'actual_temperature',
             
             # Humidity
             'humidity': 'humidity',
             'relative_humidity_2m': 'humidity',
             'relative_humidity': 'humidity',
+            'rh': 'humidity',
             
             # Wind speed
             'wind_speed': 'wind_speed',
@@ -89,6 +101,7 @@ def process_data(data: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
             'wind_direction_model': 'wind_direction',
             'wind_direction_10m': 'wind_direction',
             'winddirection_10m': 'wind_direction',
+            'wind_dir': 'wind_direction',
             
             # Cloud cover
             'cloud_cover_low': 'cloud_cover_low',
@@ -109,53 +122,64 @@ def process_data(data: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
         
         # Map existing columns to standardized names
         required_features = ['temperature', 'humidity', 'wind_speed', 'wind_direction', 
-                            'cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high']
+                           'cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high']
         
         # Check which columns are available in the input data
         available_columns = {}
         for std_col in required_features:
-            # Find all possible column names that map to this standard column
             possible_cols = [col for col, mapped_col in column_mapping.items() if mapped_col == std_col]
-            # Find the first one that exists in the data
-            found_col = next((col for col in possible_cols if col in data.columns), None)
-            if found_col:
-                available_columns[std_col] = found_col
+            found = False
+            for col in possible_cols:
+                if col in data.columns:
+                    available_columns[std_col] = col
+                    found = True
+                    break
+            if not found:
+                if std_col in ['cloud_cover_low', 'cloud_cover_mid', 'cloud_cover_high']:
+                    # Cloud cover columns are optional, fill with zeros if missing
+                    available_columns[std_col] = None
+                else:
+                    raise ValueError(f"Missing required column: {std_col}")
         
-        # Check if we're missing any required columns
-        missing_columns = [col for col in required_features if col not in available_columns]
+        # Debug logging
+        logger.info(f"Available columns mapping: {available_columns}")
         
-        if missing_columns:
-            # Try to handle special cases
-            if 'wind_speed_model' in data.columns and 'wind_speed' in missing_columns:
-                available_columns['wind_speed'] = 'wind_speed_model'
-                missing_columns.remove('wind_speed')
-                
-            if 'wind_direction_model' in data.columns and 'wind_direction' in missing_columns:
-                available_columns['wind_direction'] = 'wind_direction_model'
-                missing_columns.remove('wind_direction')
-        
-        # If still missing columns, raise error
-        if missing_columns:
-            # Show available columns to help debugging
-            logger.error(f"Available columns: {data.columns.tolist()}")
-            raise ValueError(f"Missing required columns: {', '.join(missing_columns)}")
-        
-        # Create standardized dataframe
-        for std_col, data_col in available_columns.items():
-            processed_data[std_col] = data[data_col]
-        
-        # Extract features
-        features = processed_data[required_features].values
-        
-        # Extract timestamps if available
+        # Process timestamps
         if 'date' in data.columns:
-            timestamps = pd.to_datetime(data['date'])
-        elif 'time' in data.columns:
-            timestamps = pd.to_datetime(data['time'])
+            processed_data['date'] = pd.to_datetime(data['date'])
         else:
-            timestamps = pd.date_range(start='2023-01-01', periods=len(data), freq='H')
-            
-        return features, timestamps
+            raise ValueError("Missing date column")
+        
+        # Copy data with standardized column names
+        for std_col, orig_col in available_columns.items():
+            if orig_col is not None:
+                processed_data[std_col] = data[orig_col]
+                # Debug logging for each column
+                logger.info(f"Column {std_col} stats - NaN count: {data[orig_col].isna().sum()}, Range: [{data[orig_col].min()}, {data[orig_col].max()}]")
+            else:
+                processed_data[std_col] = 0.0  # Fill missing cloud cover with zeros
+        
+        # Check for actual temperature
+        actual_temp = None
+        for actual_col in ['temp_avg', 'temperature_obs']:
+            if actual_col in data.columns:
+                actual_temp = data[actual_col].values
+                # Debug logging for actual temperature
+                logger.info(f"Found actual temperature column: {actual_col}")
+                logger.info(f"Actual temperature stats - NaN count: {np.isnan(actual_temp).sum()}, Range: [{np.nanmin(actual_temp)}, {np.nanmax(actual_temp)}]")
+                break
+        
+        # Prepare feature array
+        features = np.column_stack([
+            processed_data[col] for col in required_features
+        ])
+        
+        # Final debug logging
+        logger.info(f"Features shape: {features.shape}")
+        logger.info(f"Features NaN count: {np.isnan(features).sum()}")
+        
+        return features, processed_data['date'].values, actual_temp
+        
     except Exception as e:
         logger.error(f"Error processing data: {str(e)}")
         raise
@@ -172,11 +196,24 @@ def plot_temperature_forecast(original, corrected, timestamps):
     Returns:
         plotly.graph_objects.Figure: Plot figure
     """
+    # Debug logging
+    logger.info(f"Plotting data shapes - Original: {original.shape}, Corrected: {corrected.shape}, Timestamps: {len(timestamps)}")
+    logger.info(f"NaN check - Original: {np.isnan(original).sum()}, Corrected: {np.isnan(corrected).sum()}")
+    logger.info(f"Sample values - Original: {original[:5]}, Corrected: {corrected[:5]}")
+    
+    # Convert timestamps to datetime if they aren't already
+    if isinstance(timestamps[0], (str, np.datetime64)):
+        timestamps = pd.to_datetime(timestamps)
+    
+    # Handle any NaN values by interpolating
+    original_clean = pd.Series(original).interpolate().values
+    corrected_clean = pd.Series(corrected).interpolate().values
+    
     fig = go.Figure()
     
     fig.add_trace(go.Scatter(
         x=timestamps,
-        y=original,
+        y=original_clean,
         mode='lines',
         name='Original Forecast',
         line=dict(color='blue', width=2)
@@ -184,7 +221,7 @@ def plot_temperature_forecast(original, corrected, timestamps):
     
     fig.add_trace(go.Scatter(
         x=timestamps,
-        y=corrected,
+        y=corrected_clean,
         mode='lines',
         name='Bias-Corrected Forecast',
         line=dict(color='green', width=2)
@@ -294,26 +331,43 @@ def plot_uncertainty(corrected, uncertainty, timestamps):
     
     return fig
 
-def display_metrics(metrics: Dict[str, float]) -> None:
+def display_metrics(metrics: Dict[str, float], has_actual_temps: bool):
     """
     Display the metrics in a Streamlit table.
     
     Args:
         metrics (Dict[str, float]): Dictionary of metrics
+        has_actual_temps (bool): Whether actual temperatures are available
     """
+    st.subheader("Results")
+    
+    if has_actual_temps:
+        st.write("Evaluation Metrics (comparing corrected forecast with actual temperatures):")
+    else:
+        st.write("Predicted Bias Statistics (no actual temperatures available for evaluation):")
+    
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.metric("Mean Bias (°C)", f"{metrics['mean_bias']:.4f}")
-        st.caption("Mean Bias: Average difference between original and corrected forecasts. Should be near 0 for unbiased corrections.")
+        st.metric(
+            "Mean Bias (°C)",
+            f"{metrics['mean_bias']:.4f}",
+            help="Mean Bias: Average difference between original and corrected forecasts. Should be near 0 for unbiased corrections."
+        )
     
     with col2:
-        st.metric("RMSE (°C)", f"{metrics['rmse']:.4f}")
-        st.caption("RMSE: Root Mean Squared Error—measures correction magnitude. Should be low (~1-2°C).")
+        st.metric(
+            "RMSE (°C)",
+            f"{metrics['rmse']:.4f}",
+            help="RMSE: Root Mean Squared Error—measures correction magnitude. Should be low (~1-2°C)."
+        )
     
     with col3:
-        st.metric("MAE (°C)", f"{metrics['mae']:.4f}")
-        st.caption("MAE: Mean Absolute Error—average correction size. Should match typical bias (~1-2°C).")
+        st.metric(
+            "MAE (°C)",
+            f"{metrics['mae']:.4f}",
+            help="MAE: Mean Absolute Error—average correction size. Should match typical bias (~1-2°C)."
+        )
 
 def main():
     """Main Streamlit app function."""
@@ -379,7 +433,7 @@ def main():
                 else:
                     try:
                         # Process data
-                        features, timestamps = process_data(data)
+                        features, timestamps, actual_temps = process_data(data)
                         
                         # Make predictions
                         predictions, uncertainty = st.session_state.model_server.predict(
@@ -388,13 +442,39 @@ def main():
                             batch_size=32
                         )
                         
+                        # Calculate corrected temperatures
+                        corrected_temps = features[:, 0] - predictions.squeeze()
+                        
                         # Store results in session state
                         st.session_state.results = {
-                            'original': features[:, 0],  # Assuming first column is temperature
-                            'bias': predictions.squeeze(),  # This is the predicted bias
-                            'corrected': features[:, 0] - predictions.squeeze(),  # Apply bias correction
+                            'original': features[:, 0],  # Original forecast temperature
+                            'bias': predictions.squeeze(),  # Predicted bias
+                            'corrected': corrected_temps,  # Corrected temperatures
                             'uncertainty': uncertainty.squeeze() if uncertainty is not None else None,
-                            'timestamps': timestamps
+                            'timestamps': timestamps,
+                            'actual_temps': actual_temps  # May be None if not available
+                        }
+                        
+                        # Calculate metrics
+                        if actual_temps is not None:
+                            # Calculate metrics against actual temperatures
+                            error = corrected_temps - actual_temps
+                            metrics = {
+                                'mean_bias': np.mean(error),
+                                'rmse': np.sqrt(np.mean(error**2)),
+                                'mae': np.mean(np.abs(error))
+                            }
+                        else:
+                            # Just show statistics of the predicted bias
+                            metrics = {
+                                'mean_bias': np.mean(predictions),
+                                'rmse': np.sqrt(np.mean(predictions**2)),
+                                'mae': np.mean(np.abs(predictions))
+                            }
+                        
+                        st.session_state.metrics = {
+                            'values': metrics,
+                            'has_actual_temps': actual_temps is not None
                         }
                         
                         st.success("Data processed successfully!")
@@ -410,12 +490,7 @@ def main():
             results = st.session_state.results
             
             # Display metrics
-            metrics = {
-                'mean_bias': np.mean(results['bias']),  # This should be the bias prediction itself
-                'rmse': np.sqrt(np.mean(results['bias']**2)),  # RMSE of the bias
-                'mae': np.mean(np.abs(results['bias']))  # MAE of the bias
-            }
-            display_metrics(metrics)
+            display_metrics(st.session_state.metrics['values'], st.session_state.metrics['has_actual_temps'])
             
             # Create tabs for different visualizations
             tab1, tab2, tab3 = st.tabs([
