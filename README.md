@@ -1,10 +1,10 @@
-# Weather Forecast Bias Correction using Deep Learning
+# HybridWeatherNet: A LSTM-GNN Framework with Attention for Weather Forecast Bias Correction
 
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue)](https://www.python.org/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.2.0-red)](https://pytorch.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A deep learning approach for correcting systematic biases in weather forecasts using a hybrid architecture that combines LSTM networks for temporal patterns, Graph Neural Networks for spatial relationships, and attention mechanisms for feature fusion.
+A novel deep learning framework that combines LSTM networks for temporal patterns, Graph Neural Networks for spatial relationships, and attention mechanisms for feature fusion to correct systematic biases in weather forecasts. Our approach achieves state-of-the-art performance with mean bias of 0.3°C and RMSE of 0.45°C on unseen data.
 
 ## 🌟 Key Features
 
@@ -126,10 +126,12 @@ The model will predict the bias in the temperature forecast, which can then be a
 
 If you use this code in your research, please cite:
 ```bibtex
-@article{weather_bias_correction,
-  title={Bias Correction in Numerical Weather Prediction Temperature Forecasting: A Deep Learning Approach},
+@article{hybridweathernet2025,
+  title={HybridWeatherNet: A LSTM-GNN Framework with Attention for Weather Forecast Bias Correction},
   author={Mahesh Sharan},
-  year={2025}
+  journal={Environmental Data Science},
+  year={2025},
+  publisher={Cambridge University Press}
 }
 ```
 
