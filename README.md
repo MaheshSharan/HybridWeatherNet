@@ -122,19 +122,6 @@ date,temperature,humidity,wind_speed_model,wind_direction_model,cloud_cover_low,
 
 The model will predict the bias in the temperature forecast, which can then be applied to correct the original forecast.
 
-## 📝 Citation
-
-If you use this code in your research, please cite:
-```bibtex
-@article{hybridweathernet2025,
-  title={HybridWeatherNet: A LSTM-GNN Framework with Attention for Weather Forecast Bias Correction},
-  author={Mahesh Sharan},
-  journal={Environmental Data Science},
-  year={2025},
-  publisher={Cambridge University Press}
-}
-```
-
 ## Model Performance Analysis
 
 ### Current Performance Metrics
